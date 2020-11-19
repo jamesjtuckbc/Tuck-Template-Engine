@@ -9,7 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const Validate = require("../lib/Validate");
+const Validate = require("./lib/Validate");
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -18,15 +18,158 @@ function init() {
         .prompt([
             {
                 type: 'input',
-                message: 'What is your name?',
+                message: 'Employee ID?',
+                name: 'id',
+                validate: (id) => Validate.valId(id),
+            },
+            {
+                type: 'input',
+                message: 'Employee name?',
                 name: 'name',
-                validate: Validate.valName(val),
-            }
+                validate: (name) => Validate.valName(name),
+            },
+            {
+                type: 'input',
+                message: 'Employee email?',
+                name: 'email',
+                validate: (email) => Validate.valEmail(email),
+            },
+            {
+                type: 'list',
+                message: 'Employee role?',
+                name: 'role',
+                choices: ['Manager', 'Engineer', 'Intern'],
+            },
         ])
-        .then(val => {
-            console.log(val.name);
+        .then(emp => {
+            console.log(emp.name);
+            console.log(emp.role);
+            switch (emp.role) {
+                case 'Manager':
+                    console.log(emp.role);
+                    managerQuestions(emp);
+                    break;
+                case 'Engineer':
+                    console.log(emp.role);
+                    engineerQuestions(emp);
+                    break;
+                case 'Intern':
+                    console.log(emp.role);
+                    InternQuestions(emp);
+                    break;
+            }
         })
-}
+};
+
+const managerQuestions = (emp) => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'Employee ID?',
+                name: 'id',
+                validate: (id) => Validate.valId(id),
+            },
+            {
+                type: 'input',
+                message: 'Employee name?',
+                name: 'name',
+                validate: (name) => Validate.valName(name),
+            },
+            {
+                type: 'input',
+                message: 'Employee email?',
+                name: 'email',
+                validate: (email) => Validate.valEmail(email),
+            },
+            {
+                type: 'list',
+                message: 'Employee role?',
+                name: 'role',
+                choices: ['Manager', 'Engineer', 'Intern'],
+            },
+        ])
+        .then(mgr => {
+            console.log(emp.id);
+            console.log(emp.name);
+            console.log(emp.email);
+            console.log(emp.role);
+        })
+};
+
+const engineerQuestions = (emp) => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'Employee ID?',
+                name: 'id',
+                validate: (id) => Validate.valId(id),
+            },
+            {
+                type: 'input',
+                message: 'Employee name?',
+                name: 'name',
+                validate: (name) => Validate.valName(name),
+            },
+            {
+                type: 'input',
+                message: 'Employee email?',
+                name: 'email',
+                validate: (email) => Validate.valEmail(email),
+            },
+            {
+                type: 'list',
+                message: 'Employee role?',
+                name: 'role',
+                choices: ['Manager', 'Engineer', 'Intern'],
+            },
+        ])
+        .then(eng => {
+            console.log(emp.id);
+            console.log(emp.name);
+            console.log(emp.email);
+            console.log(emp.role);
+        })
+};
+
+const InternQuestions = (emp) => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'Employee ID?',
+                name: 'id',
+                validate: (id) => Validate.valId(id),
+            },
+            {
+                type: 'input',
+                message: 'Employee name?',
+                name: 'name',
+                validate: (name) => Validate.valName(name),
+            },
+            {
+                type: 'input',
+                message: 'Employee email?',
+                name: 'email',
+                validate: (email) => Validate.valEmail(email),
+            },
+            {
+                type: 'list',
+                message: 'Employee role?',
+                name: 'role',
+                choices: ['Manager', 'Engineer', 'Intern'],
+            },
+        ])
+        .then(int => {
+            console.log(emp.id);
+            console.log(emp.name);
+            console.log(emp.email);
+            console.log(emp.role);
+        })
+};
+
+
 init();
 // and to create objects for each team member (using the correct classes as blueprints!)
 
