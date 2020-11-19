@@ -9,9 +9,25 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const Validate = require("../lib/Validate");
 
 
 // Write code to use inquirer to gather information about the development team members,
+function init() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is your name?',
+                name: 'name',
+                validate: Validate.valName(val),
+            }
+        ])
+        .then(val => {
+            console.log(val.name);
+        })
+}
+init();
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 // After the user has input all employees desired, call the `render` function (required
