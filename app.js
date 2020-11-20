@@ -61,7 +61,7 @@ function init() {
         })
 };
 
-const managerQuestions = (emp) => {
+function employee() {
     inquirer
         .prompt([
             {
@@ -86,7 +86,39 @@ const managerQuestions = (emp) => {
                 type: 'list',
                 message: 'Employee role?',
                 name: 'role',
-                choices: ['Manager', 'Engineer', 'Intern'],
+                choices: ['Engineer', 'Intern'],
+            },
+        ])
+        .then(emp => {
+            console.log(emp.name);
+            console.log(emp.role);
+            switch (emp.role) {
+                case 'Engineer':
+                    console.log(emp.role);
+                    engineerQuestions(emp);
+                    break;
+                case 'Intern':
+                    console.log(emp.role);
+                    InternQuestions(emp);
+                    break;
+            }
+        })
+};
+
+const managerQuestions = (emp) => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'Office number?',
+                name: 'officeNumber',
+                validate: (officeNumber) => Validate.valOffNum(officeNumber),
+            },
+            {
+                type: 'list',
+                message: 'Add additional team members?',
+                name: 'add',
+                choices: ['Yes', 'No'],
             },
         ])
         .then(mgr => {
@@ -94,6 +126,11 @@ const managerQuestions = (emp) => {
             console.log(emp.name);
             console.log(emp.email);
             console.log(emp.role);
+            console.log(mgr.officeNumber);
+            console.log(mgr.add);
+            if(mgr.add === 'Yes') {
+                employee();
+            }
         })
 };
 

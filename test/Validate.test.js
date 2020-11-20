@@ -35,3 +35,15 @@ test("is email invalid?", () => {
     const v = Validate.valEmail(testEmail)
     expect(v).toBe(false);
 });
+
+test("Is office number valid", () => {
+    const testOffNum = '(123) 268-4567';
+    const v = Validate.valOffNum(testOffNum)
+    expect(v).toBe(true);
+});
+
+test("is office number invalid?", () => {
+    const testOffNum = '(801)jhf';
+    const v = Validate.valOffNum(testOffNum)
+    expect(v).toBe(false);
+});
