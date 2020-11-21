@@ -11,6 +11,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const Validate = require("./lib/Validate");
 
+const empId = [];
+const employees = [];
 
 // Write code to use inquirer to gather information about the development team members,
 function init() {
@@ -18,45 +20,44 @@ function init() {
         .prompt([
             {
                 type: 'input',
-                message: 'Employee ID?',
+                message: 'Manager ID?',
                 name: 'id',
                 validate: (id) => Validate.valId(id),
             },
             {
                 type: 'input',
-                message: 'Employee name?',
+                message: 'Manager name?',
                 name: 'name',
                 validate: (name) => Validate.valName(name),
             },
             {
                 type: 'input',
-                message: 'Employee email?',
+                message: 'Manager email?',
                 name: 'email',
                 validate: (email) => Validate.valEmail(email),
             },
             {
+                type: 'input',
+                message: 'Manager office number?',
+                name: 'officeNumber',
+                validate: (officeNumber) => Validate.valOffNum(officeNumber),
+            },
+            {
                 type: 'list',
-                message: 'Employee role?',
-                name: 'role',
-                choices: ['Manager', 'Engineer', 'Intern'],
+                message: 'Add additional team members?',
+                name: 'add',
+                choices: ['Yes', 'No'],
             },
         ])
-        .then(emp => {
-            console.log(emp.name);
-            console.log(emp.role);
-            switch (emp.role) {
-                case 'Manager':
-                    console.log(emp.role);
-                    managerQuestions(emp);
-                    break;
-                case 'Engineer':
-                    console.log(emp.role);
-                    engineerQuestions(emp);
-                    break;
-                case 'Intern':
-                    console.log(emp.role);
-                    InternQuestions(emp);
-                    break;
+        .then(mgr => {
+            empId.push(mgr.id);
+            
+            const mgrObj = new Manager(mgr.name, mgr.id, mgr.email, mgr.officeNumber);
+
+            employees.push(mgrObj);
+
+            if (mgr.add === 'Yes') {
+                employee();
             }
         })
 };
@@ -68,7 +69,9 @@ function employee() {
                 type: 'input',
                 message: 'Employee ID?',
                 name: 'id',
-                validate: (id) => Validate.valId(id),
+                validate: (id) => {
+                    return empId.includes(id) ? console.log(` - ID already in use`) : Validate.valId(id);
+                },
             },
             {
                 type: 'input',
@@ -105,14 +108,13 @@ function employee() {
         })
 };
 
-const managerQuestions = (emp) => {
+const engineerQuestions = (emp) => {
     inquirer
         .prompt([
             {
                 type: 'input',
-                message: 'Office number?',
-                name: 'officeNumber',
-                validate: (officeNumber) => Validate.valOffNum(officeNumber),
+                message: 'GitHub username?',
+                name: 'github',
             },
             {
                 type: 'list',
@@ -121,52 +123,16 @@ const managerQuestions = (emp) => {
                 choices: ['Yes', 'No'],
             },
         ])
-        .then(mgr => {
-            console.log(emp.id);
-            console.log(emp.name);
-            console.log(emp.email);
-            console.log(emp.role);
-            console.log(mgr.officeNumber);
-            console.log(mgr.add);
-            if(mgr.add === 'Yes') {
+        .then(eng => {
+            empId.push(emp.id);
+
+            const engObj = new Engineer(emp.name, emp.id, emp.email, eng.github);
+
+            employees.push(engObj);
+
+            if (eng.add === 'Yes') {
                 employee();
             }
-        })
-};
-
-const engineerQuestions = (emp) => {
-    inquirer
-        .prompt([
-            {
-                type: 'input',
-                message: 'Employee ID?',
-                name: 'id',
-                validate: (id) => Validate.valId(id),
-            },
-            {
-                type: 'input',
-                message: 'Employee name?',
-                name: 'name',
-                validate: (name) => Validate.valName(name),
-            },
-            {
-                type: 'input',
-                message: 'Employee email?',
-                name: 'email',
-                validate: (email) => Validate.valEmail(email),
-            },
-            {
-                type: 'list',
-                message: 'Employee role?',
-                name: 'role',
-                choices: ['Manager', 'Engineer', 'Intern'],
-            },
-        ])
-        .then(eng => {
-            console.log(emp.id);
-            console.log(emp.name);
-            console.log(emp.email);
-            console.log(emp.role);
         })
 };
 
@@ -175,34 +141,26 @@ const InternQuestions = (emp) => {
         .prompt([
             {
                 type: 'input',
-                message: 'Employee ID?',
-                name: 'id',
-                validate: (id) => Validate.valId(id),
-            },
-            {
-                type: 'input',
-                message: 'Employee name?',
-                name: 'name',
-                validate: (name) => Validate.valName(name),
-            },
-            {
-                type: 'input',
-                message: 'Employee email?',
-                name: 'email',
-                validate: (email) => Validate.valEmail(email),
+                message: 'What school are they attending?',
+                name: 'school',
             },
             {
                 type: 'list',
-                message: 'Employee role?',
-                name: 'role',
-                choices: ['Manager', 'Engineer', 'Intern'],
+                message: 'Add additional team members?',
+                name: 'add',
+                choices: ['Yes', 'No'],
             },
         ])
         .then(int => {
-            console.log(emp.id);
-            console.log(emp.name);
-            console.log(emp.email);
-            console.log(emp.role);
+            empId.push(emp.id);
+
+            const intObj = new Engineer(emp.name, emp.id, emp.email, int.school);
+
+            employees.push(intObj);
+
+            if (int.add === 'Yes') {
+                employee();
+            }
         })
 };
 
